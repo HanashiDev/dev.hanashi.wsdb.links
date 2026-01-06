@@ -1,0 +1,12 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property wcf\\data\\wsdb\\database\\Database\:\:\$enableLinks\.$#'
+			identifier: property.notFound
+			count: 1
+			path: files/lib/system/event/listener/LinksWsdbRecordAddFormListener.class.php
+		-
+			message: '#^Access to an undefined property wcf\\data\\wsdb\\database\\Database\:\:\$linksMandatory\.$#'
+			identifier: property.notFound
+			count: 1
+			path: files/lib/system/event/listener/LinksWsdbRecordAddFormListener.class.php
