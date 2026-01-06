@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/eventListener.xsd">
+	<import>
+		<eventlistener name="linksWsdbDatabaseEditFormListener">
+			<eventclassname>wcf\acp\form\WsdbDatabaseEditForm</eventclassname>
+			<eventname>createForm</eventname>
+			<listenerclassname>wcf\system\event\listener\LinksWsdbDatabaseEditFormListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="linksWsdbDatabaseAddFormListener">
+			<eventclassname>wcf\acp\form\WsdbDatabaseAddForm</eventclassname>
+			<eventname>buildForm</eventname>
+			<listenerclassname>wcf\system\event\listener\LinksWsdbDatabaseAddFormListener</listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
+		<eventlistener name="linksWsdbRecordAddFormListener">
+			<eventclassname>wcf\form\WsdbRecordAddForm</eventclassname>
+			<eventname>createForm</eventname>
+			<listenerclassname>wcf\system\event\listener\LinksWsdbRecordAddFormListener</listenerclassname>
+		</eventlistener>
+	</import>
+</data>

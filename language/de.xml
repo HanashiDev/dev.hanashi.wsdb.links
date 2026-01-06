@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/language.xsd" languagecode="de" languagename="Deutsch" countrycode="de">
+	<import>
+		<category name="wsdb.preset">
+			<item name="wsdb.preset.dev.hanashi.links"><![CDATA[Linkdatenbank]]></item>
+		</category>
+		<category name="dev.hanashi.wsdb">
+			<item name="dev.hanashi.wsdb.enableLinks"><![CDATA[Links aktivieren]]></item>
+			<item name="dev.hanashi.wsdb.linksMandatory"><![CDATA[Angabe eines Links verpflichtend]]></item>
+			<item name="dev.hanashi.wsdb.externalUrl"><![CDATA[Link]]></item>
+			<item name="dev.hanashi.wsdb.linkButton"><![CDATA[Link öffnen]]></item>
+		</category>
+	</import>
+</language>
