@@ -2,7 +2,7 @@
 <language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/language.xsd" languagecode="en" languagename="English" countrycode="gb">
 	<import>
 		<category name="wsdb.preset">
-			<item name="wsdb.preset.dev.hanashi.links"><![CDATA[Linkdatenbank]]></item>
+			<item name="wsdb.preset.dev.hanashi.links"><![CDATA[Link database]]></item>
 		</category>
 		<category name="dev.hanashi.wsdb">
 			<item name="dev.hanashi.wsdb.enableLinks"><![CDATA[Enable links]]></item>
