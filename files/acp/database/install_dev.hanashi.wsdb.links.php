@@ -8,11 +8,9 @@ return [
     PartialDatabaseTable::create('wcf1_wsdb_database')
         ->columns([
             TinyintDatabaseTableColumn::create('enableLinks')
-                ->length(1)
                 ->notNull()
                 ->defaultValue(0),
             TinyintDatabaseTableColumn::create('linksMandatory')
-                ->length(1)
                 ->notNull()
                 ->defaultValue(0),
         ]),
