@@ -9,6 +9,7 @@
 			<item name="dev.hanashi.wsdb.linksMandatory"><![CDATA[Providing a link is mandatory]]></item>
 			<item name="dev.hanashi.wsdb.externalUrl"><![CDATA[Link]]></item>
 			<item name="dev.hanashi.wsdb.linkButton"><![CDATA[Open link]]></item>
+			<item name="dev.hanashi.wsdb.linkButtonTitle"><![CDATA[Labeling of the link button]]></item>
 		</category>
 	</import>
 </language>

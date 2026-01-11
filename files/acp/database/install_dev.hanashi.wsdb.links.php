@@ -19,4 +19,11 @@ return [
             VarcharDatabaseTableColumn::create('externalUrl')
                 ->length(255),
         ]),
+    PartialDatabaseTable::create('wcf1_wsdb_database_language')
+        ->columns([
+            VarcharDatabaseTableColumn::create('linkButton')
+                ->length(100)
+                ->notNull()
+                ->defaultValue(''),
+        ]),
 ];

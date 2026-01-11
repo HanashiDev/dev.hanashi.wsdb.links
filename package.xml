@@ -6,8 +6,8 @@
 		<packagename language="de">Database: Links</packagename>
 		<packagedescription>Links for the WoltLab Suite Database</packagedescription>
 		<packagedescription language="de">Links für die WoltLab Suite Database</packagedescription>
-		<version>1.0.1</version>
-		<date>2026-01-09</date>
+		<version>1.0.2</version>
+		<date>2026-01-11</date>
 	</packageinformation>
 	<authorinformation>
 		<author>Hanashi Development</author>
@@ -23,14 +23,19 @@
 	</excludedpackages>
 	<instructions type="install">
 		<instruction type="file"/>
+		<instruction type="template"/>
 		<instruction type="language"/>
 		<instruction type="eventListener"/>
-		<instruction type="template"/>
 		<instruction type="templateListener"/>
 		<instruction type="database">acp/database/install_dev.hanashi.wsdb.links.php</instruction>
+		<instruction type="script" run="standalone">acp/install_dev.hanashi.wsdb.links.php</instruction>
 	</instructions>
-	<instructions type="update" fromversion="1.0.0">
+	<instructions type="update" fromversion="1.0.1">
 		<instruction type="file"/>
+		<instruction type="template"/>
+		<instruction type="language"/>
+		<instruction type="eventListener"/>
 		<instruction type="database">acp/database/install_dev.hanashi.wsdb.links.php</instruction>
+		<instruction type="script" run="standalone">acp/install_dev.hanashi.wsdb.links.php</instruction>
 	</instructions>
 </package>

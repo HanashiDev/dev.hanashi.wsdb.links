@@ -3,7 +3,7 @@
 	<import>
 		<eventlistener name="linksWsdbDatabaseEditFormListener">
 			<eventclassname>wcf\acp\form\WsdbDatabaseEditForm</eventclassname>
-			<eventname>createForm</eventname>
+			<eventname>createForm,buildForm,saved</eventname>
 			<listenerclassname>wcf\system\event\listener\LinksWsdbDatabaseEditFormListener</listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
@@ -17,6 +17,7 @@
 			<eventclassname>wcf\form\WsdbRecordAddForm</eventclassname>
 			<eventname>createForm</eventname>
 			<listenerclassname>wcf\system\event\listener\LinksWsdbRecordAddFormListener</listenerclassname>
+			<inherit>1</inherit>
 		</eventlistener>
 	</import>
 </data>

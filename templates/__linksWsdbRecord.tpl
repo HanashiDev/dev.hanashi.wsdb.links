@@ -3,10 +3,10 @@
 		<a
 			href="{$view->record->externalUrl}"
 			class="button buttonPrimary wsdbLink externalURL"
-			rel="nofollow{if EXTERNAL_LINK_TARGET_BLANK} noopener{/if}"
+			rel="ugc nofollow{if EXTERNAL_LINK_TARGET_BLANK} noopener{/if}"
 			{if EXTERNAL_LINK_TARGET_BLANK} target="_blank"{/if}
 		>
-			{lang}dev.hanashi.wsdb.linkButton{/lang}
+			{$view->database->getPhrase($__wcf->getLanguage()->languageID, 'linkButton')}
 		</a>
 	</li>
 {/if}
