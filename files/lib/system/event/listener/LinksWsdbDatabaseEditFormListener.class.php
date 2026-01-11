@@ -50,17 +50,19 @@ final class LinksWsdbDatabaseEditFormListener extends AbstractEventListener
             new CustomFormDataProcessor(
                 'linksProcessor',
                 static function (IFormDocument $document, array $parameters): array {
-                    if (\is_array($parameters['linkButton_i18n'])) {
-                        $parameters['language']['linkButton'] = $parameters['linkButton_i18n'];
-                    } else {
-                        $parameters['language']['linkButton'] = [
-                            WCF::getLanguage()->languageID => $parameters['linkButton_i18n'],
-                        ];
+                    if (isset($parameters['linkButton_i18n'])) {
+                        if (\is_array($parameters['linkButton_i18n'])) {
+                            $parameters['language']['linkButton'] = $parameters['linkButton_i18n'];
+                        } else {
+                            $parameters['language']['linkButton'] = [
+                                WCF::getLanguage()->languageID => $parameters['linkButton_i18n'],
+                            ];
+                        }
+                        unset(
+                            $parameters['linkButton_i18n'],
+                            $parameters['data']['linkButton']
+                        );
                     }
-                    unset(
-                        $parameters['linkButton_i18n'],
-                        $parameters['data']['linkButton']
-                    );
 
                     return $parameters;
                 },
@@ -80,16 +82,19 @@ final class LinksWsdbDatabaseEditFormListener extends AbstractEventListener
     {
         $formData = $eventObj->form->getData();
 
-        foreach (LanguageFactory::getInstance()->getLanguages() as $language) {
-            $databaseLanguage = DatabaseLanguage::getDatabaseLanguage(
-                $eventObj->formObject->databaseID,
-                $language->languageID
-            );
-            if ($databaseLanguage !== null) {
-                $action = new DatabaseLanguageAction([$databaseLanguage], 'update', ['data' => [
-                    'linkButton' => $formData['language']['linkButton'][$language->languageID] ?? '',
-                ]]);
-                $action->executeAction();
+        if (isset($formData['language']['linkButton'])) {
+            foreach (LanguageFactory::getInstance()->getLanguages() as $language) {
+                $databaseLanguage = DatabaseLanguage::getDatabaseLanguage(
+                    $eventObj->formObject->databaseID,
+                    $language->languageID
+                );
+                if ($databaseLanguage !== null) {
+                    $action = new DatabaseLanguageAction([$databaseLanguage], 'update', ['data' => [
+                        'linkButton' => $formData['language']['linkButton'][$language->languageID]
+                            ?? $language->get('dev.hanashi.wsdb.linkButton'),
+                    ]]);
+                    $action->executeAction();
+                }
             }
         }
     }
