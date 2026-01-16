@@ -26,5 +26,10 @@
 			<definitionname>com.woltlab.wcf.importer</definitionname>
 			<classname>wcf\system\wsdb\importer\LinkCategoryACLImporter</classname>
 		</type>
+		<type>
+			<name>dev.hanashi.wsdb.links.option</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname>wcf\system\wsdb\importer\LinkOptionsImporter</classname>
+		</type>
 	</import>
 </data>

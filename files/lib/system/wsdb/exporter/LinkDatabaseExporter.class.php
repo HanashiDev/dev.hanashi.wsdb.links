@@ -21,11 +21,11 @@ final class LinkDatabaseExporter extends AbstractExporter
         'dev.hanashi.wsdb.links.permission' => 'Permissions',
         'dev.hanashi.wsdb.links.category' => 'Categories',
         'dev.hanashi.wsdb.links.category.acl' => 'CategoryACLs',
-        'dev.hanashi.wsdb.links.option' => 'Option',
+        'dev.hanashi.wsdb.links.option' => 'Options',
         'dev.hanashi.wsdb.links.links' => 'Links',
-        'dev.hanashi.wsdb.links.comment' => 'Comment',
-        'dev.hanashi.wsdb.links.comment.response' => 'CommentResponse',
-        'dev.hanashi.wsdb.links.bbcode' => 'BBCode',
+        'dev.hanashi.wsdb.links.option.values' => 'OptionValues',
+        'dev.hanashi.wsdb.links.comment' => 'Comments',
+        'dev.hanashi.wsdb.links.comment.response' => 'CommentResponses',
     ];
 
     #[\Override]
@@ -76,6 +76,9 @@ final class LinkDatabaseExporter extends AbstractExporter
                     $queue[] = 'dev.hanashi.wsdb.links.category.acl';
                 }
             }
+            if (\in_array('dev.hanashi.wsdb.links.option', $this->selectedData)) {
+                $queue[] = 'dev.hanashi.wsdb.links.option';
+            }
         }
 
         return $queue;
@@ -91,6 +94,7 @@ final class LinkDatabaseExporter extends AbstractExporter
                 'dev.hanashi.wsdb.links.category.acl',
                 'dev.hanashi.wsdb.links.option',
                 'dev.hanashi.wsdb.links.links',
+                'dev.hanashi.wsdb.links.option.values',
                 'dev.hanashi.wsdb.links.comment',
                 'dev.hanashi.wsdb.links.comment.response',
                 'dev.hanashi.wsdb.links.bbcode',
@@ -387,6 +391,44 @@ final class LinkDatabaseExporter extends AbstractExporter
                         ['optionName' => $acl]
                     );
             }
+        }
+    }
+
+    public function countOptions(): int
+    {
+        $sql = "SELECT  COUNT(*)
+                FROM    wcf1_links_option";
+
+        $statement = $this->database->prepare($sql);
+        $statement->execute();
+
+        return $statement->fetchSingleColumn();
+    }
+
+    public function exportOptions(int $offset, int $limit): void
+    {
+        $sql = "SELECT  optionID,
+                        categoryID
+                FROM    wcf1_links_option_to_category";
+        $statement = $this->database->prepare($sql);
+        $statement->execute();
+        $categories = $statement->fetchMap('optionID', 'categoryID', false);
+
+        $sql = "SELECT  *
+                FROM    wcf1_links_option";
+        $statement = $this->database->prepare($sql, $limit, $offset);
+        $statement->execute();
+
+        while ($row = $statement->fetchArray()) {
+            ImportHandler::getInstance()
+                ->getImporter('dev.hanashi.wsdb.links.option')
+                ->import(
+                    $row['optionID'],
+                    $row,
+                    [
+                        'categories' => $categories[$row['optionID']] ?? [],
+                    ]
+                );
         }
     }
 
