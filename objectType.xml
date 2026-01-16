@@ -31,5 +31,10 @@
 			<definitionname>com.woltlab.wcf.importer</definitionname>
 			<classname>wcf\system\wsdb\importer\LinkOptionsImporter</classname>
 		</type>
+		<type>
+			<name>dev.hanashi.wsdb.links.links</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname>wcf\system\wsdb\importer\LinkLinkImporter</classname>
+		</type>
 	</import>
 </data>

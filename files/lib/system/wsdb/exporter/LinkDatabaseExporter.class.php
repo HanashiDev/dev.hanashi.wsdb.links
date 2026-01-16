@@ -138,8 +138,9 @@ final class LinkDatabaseExporter extends AbstractExporter
 
     public function exportPermissions(int $offset, int $limit): void
     {
-        $sql = "SELECT  *
-                FROM    wcf1_user_group";
+        $sql = "SELECT      *
+                FROM        wcf1_user_group
+                ORDER BY    groupID";
 
         $statement = $this->database->prepare($sql, $limit, $offset);
         $statement->execute();
@@ -378,7 +379,7 @@ final class LinkDatabaseExporter extends AbstractExporter
                             AND acl_option.objectTypeID = ?
                 )
                 ORDER BY    optionID, objectID, userID, groupID";
-        $statement = $this->database->prepareUnmanaged($sql, $limit, $offset);
+        $statement = $this->database->prepare($sql, $limit, $offset);
         $statement->execute([$objectType->objectTypeID, $objectType->objectTypeID]);
         while ($row = $statement->fetchArray()) {
             $acls = $aclMap[$row['optionName']] ?? [];
@@ -425,8 +426,9 @@ final class LinkDatabaseExporter extends AbstractExporter
         $statement->execute();
         $categories = $statement->fetchMap('optionID', 'categoryID', false);
 
-        $sql = "SELECT  *
-                FROM    wcf1_links_option";
+        $sql = "SELECT      *
+                FROM        wcf1_links_option
+                ORDER BY    optionID";
         $statement = $this->database->prepare($sql, $limit, $offset);
         $statement->execute();
 
@@ -441,6 +443,65 @@ final class LinkDatabaseExporter extends AbstractExporter
                     ]
                 );
         }
+    }
+
+    public function countLinks(): int
+    {
+        $sql = "SELECT  COUNT(*)
+                FROM    wcf1_links";
+
+        $statement = $this->database->prepare($sql);
+        $statement->execute();
+
+        return $statement->fetchSingleColumn();
+    }
+
+    public function exportLinks(int $offset, int $limit): void
+    {
+        $sql = "SELECT      *
+                FROM        wcf1_links
+                ORDER BY    linkID";
+        $statement = $this->database->prepare($sql, $limit, $offset);
+        $statement->execute();
+
+        $tags = $this->getLinkTags();
+
+        while ($row = $statement->fetchArray()) {
+            ImportHandler::getInstance()
+                ->getImporter('dev.hanashi.wsdb.links.links')
+                ->import(
+                    $row['linkID'],
+                    $row,
+                    [
+                        'tags' => $tags[$row['linkID']] ?? [],
+                    ]
+                );
+        }
+    }
+
+    /**
+     * @return array<int, string[]>
+     */
+    private function getLinkTags(): array
+    {
+        $objectType = ObjectTypeCache::getInstance()->getObjectTypeByName(
+            'com.woltlab.wcf.tagging.taggableObject',
+            'de.pehbeh.links.linkEntry'
+        );
+        if ($objectType === null) {
+            return [];
+        }
+
+        $sql = "SELECT      tag_to_object.objectID,
+                            tag.name
+                FROM        wcf1_tag tag
+                INNER JOIN  wcf1_tag_to_object tag_to_object
+                        ON  tag_to_object.tagID = tag.tagID
+                WHERE       tag_to_object.objectTypeID";
+        $statement = $this->database->prepare($sql);
+        $statement->execute();
+
+        return $statement->fetchMap('objectID', 'name', false);
     }
 
     /**
