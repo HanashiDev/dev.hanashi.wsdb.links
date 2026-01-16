@@ -56,5 +56,10 @@
 			<definitionname>com.woltlab.wcf.importer</definitionname>
 			<classname>wcf\system\wsdb\importer\LinkReactionImporter</classname>
 		</type>
+		<type>
+			<name>dev.hanashi.wsdb.links.attachments</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname>wcf\system\wsdb\importer\LinkAttachmentImporter</classname>
+		</type>
 	</import>
 </data>

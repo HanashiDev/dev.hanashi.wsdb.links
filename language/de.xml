@@ -26,6 +26,7 @@
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.comment"><![CDATA[Kommentare]]></item>
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.comment.response"><![CDATA[Antworten auf Kommentare]]></item>
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.reaction"><![CDATA[Reaktionen]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.attachments"><![CDATA[Anhänge]]></item>
 		</category>
 	</import>
 </language>

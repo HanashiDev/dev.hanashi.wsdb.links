@@ -23,7 +23,7 @@ final class LinkDatabaseExporter extends AbstractExporter
         'dev.hanashi.wsdb.links.category.acl' => 'CategoryACLs',
         'dev.hanashi.wsdb.links.option' => 'Options',
         'dev.hanashi.wsdb.links.links' => 'Links',
-        // TODO: attachment importer
+        'dev.hanashi.wsdb.links.attachments' => 'Attachments',
         'dev.hanashi.wsdb.links.option.values' => 'OptionValues',
         'dev.hanashi.wsdb.links.comment' => 'Comments',
         'dev.hanashi.wsdb.links.comment.response' => 'CommentResponses',
@@ -83,6 +83,9 @@ final class LinkDatabaseExporter extends AbstractExporter
             }
             if (\in_array('dev.hanashi.wsdb.links.links', $this->selectedData)) {
                 $queue[] = 'dev.hanashi.wsdb.links.links';
+                if (\in_array('dev.hanashi.wsdb.links.attachments', $this->selectedData)) {
+                    $queue[] = 'dev.hanashi.wsdb.links.attachments';
+                }
                 if (
                     \in_array('dev.hanashi.wsdb.links.option', $this->selectedData)
                     && \in_array('dev.hanashi.wsdb.links.option.values', $this->selectedData)
@@ -114,6 +117,7 @@ final class LinkDatabaseExporter extends AbstractExporter
                 'dev.hanashi.wsdb.links.category.acl',
                 'dev.hanashi.wsdb.links.option',
                 'dev.hanashi.wsdb.links.links',
+                'dev.hanashi.wsdb.links.attachments',
                 'dev.hanashi.wsdb.links.option.values',
                 'dev.hanashi.wsdb.links.comment',
                 'dev.hanashi.wsdb.links.comment.response',
@@ -488,6 +492,37 @@ final class LinkDatabaseExporter extends AbstractExporter
         }
     }
 
+    public function countAttachments(): int
+    {
+        $sql = "SELECT  COUNT(*)
+                FROM    wcf1_links
+                WHERE   attachments <> ?";
+
+        $statement = $this->database->prepare($sql);
+        $statement->execute([0]);
+
+        return $statement->fetchSingleColumn();
+    }
+
+    public function exportAttachments(int $offset, int $limit): void
+    {
+        $sql = "SELECT      linkID
+                FROM        wcf1_links
+                WHERE       attachments <> ?
+                ORDER BY    linkID";
+        $statement = $this->database->prepare($sql, $limit, $offset);
+        $statement->execute([0]);
+
+        while ($row = $statement->fetchArray()) {
+            ImportHandler::getInstance()
+                ->getImporter('dev.hanashi.wsdb.links.attachments')
+                ->import(
+                    0,
+                    $row
+                );
+        }
+    }
+
     public function countOptionValues(): int
     {
         return $this->countLinks();
@@ -632,7 +667,7 @@ final class LinkDatabaseExporter extends AbstractExporter
                                 WHERE   objectTypeID = ?
                             )
                 ORDER BY    responseID";
-        $statement = $this->database->prepareUnmanaged($sql, $limit, $offset);
+        $statement = $this->database->prepare($sql, $limit, $offset);
         $statement->execute([$objectType->objectTypeID]);
         while ($row = $statement->fetchArray()) {
             $data = [
@@ -684,7 +719,7 @@ final class LinkDatabaseExporter extends AbstractExporter
                 FROM        wcf1_like
                 WHERE       objectTypeID = ?
                 ORDER BY    likeID";
-        $statement = $this->database->prepareUnmanaged($sql, $limit, $offset);
+        $statement = $this->database->prepare($sql, $limit, $offset);
         $statement->execute([$objectType->objectTypeID]);
         while ($row = $statement->fetchArray()) {
             $data = [
