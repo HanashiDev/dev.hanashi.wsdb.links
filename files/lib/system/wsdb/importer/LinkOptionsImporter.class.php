@@ -73,6 +73,7 @@ final class LinkOptionsImporter extends AbstractImporter
                 'description' => $data['optionDescription'],
                 'optionType' => $this->optionTypeMap[$data['optionType']],
                 'configuration' => JSON::encode($configuration),
+                'displayPosition' => 'descriptionList',
                 'isDisabled' => $data['isDisabled'],
                 'isLimitedToCategories' => $additionalData['categories'] === [] ? 0 : 1,
             ],

@@ -22,6 +22,7 @@
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.category.acl"><![CDATA[Category permissions]]></item>
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.option"><![CDATA[Input options]]></item>
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.links"><![CDATA[Links]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.option.values"><![CDATA[Values of input fields]]></item>
 		</category>
 	</import>
 </language>

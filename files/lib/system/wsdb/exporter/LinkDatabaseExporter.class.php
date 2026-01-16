@@ -81,7 +81,10 @@ final class LinkDatabaseExporter extends AbstractExporter
             }
             if (\in_array('dev.hanashi.wsdb.links.links', $this->selectedData)) {
                 $queue[] = 'dev.hanashi.wsdb.links.links';
-                if (\in_array('dev.hanashi.wsdb.links.option.values', $this->selectedData)) {
+                if (
+                    \in_array('dev.hanashi.wsdb.links.option', $this->selectedData)
+                    && \in_array('dev.hanashi.wsdb.links.option.values', $this->selectedData)
+                ) {
                     $queue[] = 'dev.hanashi.wsdb.links.option.values';
                 }
                 if (\in_array('dev.hanashi.wsdb.links.comment', $this->selectedData)) {
@@ -474,6 +477,57 @@ final class LinkDatabaseExporter extends AbstractExporter
                     $row,
                     [
                         'tags' => $tags[$row['linkID']] ?? [],
+                    ]
+                );
+        }
+    }
+
+    public function countOptionValues(): int
+    {
+        return $this->countLinks();
+    }
+
+    public function exportOptionValues(int $offset, int $limit): void
+    {
+        $sql = "SELECT      linkID
+                FROM        wcf1_links
+                ORDER BY    linkID";
+        $statement = $this->database->prepare($sql, $limit, $offset);
+        $statement->execute();
+        $linkIDs = $statement->fetchAll(\PDO::FETCH_COLUMN);
+        if ($linkIDs === []) {
+            return;
+        }
+
+        $conditionBuilder = new PreparedStatementConditionBuilder();
+        $conditionBuilder->add('links_option_value.linkID IN (?)', [$linkIDs]);
+
+        $sql = "SELECT      links_option_value.*,
+                            links_option.optionType
+                FROM        wcf1_links_option_value links_option_value
+                INNER JOIN  wcf1_links_option links_option
+                        ON  links_option.optionID = links_option_value.optionID
+                " . $conditionBuilder . "
+                ORDER BY    links_option_value.linkID";
+        $statement = $this->database->prepare($sql);
+        $statement->execute($conditionBuilder->getParameters());
+
+        $optionValues = [];
+        while ($row = $statement->fetchArray()) {
+            $optionValues[$row['linkID']][] = $row;
+        }
+        if ($optionValues === []) {
+            return;
+        }
+
+        foreach ($optionValues as $linkID => $data) {
+            ImportHandler::getInstance()
+                ->getImporter('dev.hanashi.wsdb.links.option.values')
+                ->import(
+                    0,
+                    $data,
+                    [
+                        'linkID' => $linkID,
                     ]
                 );
         }
