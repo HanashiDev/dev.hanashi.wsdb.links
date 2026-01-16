@@ -19,6 +19,7 @@
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links"><![CDATA[Linkdatenbank]]></item>
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.permission"><![CDATA[Berechtigungen]]></item>
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.category"><![CDATA[Kategorien]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.category.acl"><![CDATA[Kategorie-Berechtigungen]]></item>
 		</category>
 	</import>
 </language>

@@ -20,7 +20,7 @@ final class LinkDatabaseExporter extends AbstractExporter
         'dev.hanashi.wsdb.links' => 'Database',
         'dev.hanashi.wsdb.links.permission' => 'Permissions',
         'dev.hanashi.wsdb.links.category' => 'Categories',
-        'dev.hanashi.wsdb.links.category.acl' => 'CategoryACL',
+        'dev.hanashi.wsdb.links.category.acl' => 'CategoryACLs',
         'dev.hanashi.wsdb.links.option' => 'Option',
         'dev.hanashi.wsdb.links.links' => 'Links',
         'dev.hanashi.wsdb.links.comment' => 'Comment',
@@ -69,8 +69,12 @@ final class LinkDatabaseExporter extends AbstractExporter
             if (\in_array('dev.hanashi.wsdb.links.permission', $this->selectedData)) {
                 $queue[] = 'dev.hanashi.wsdb.links.permission';
             }
+
             if (\in_array('dev.hanashi.wsdb.links.category', $this->selectedData)) {
                 $queue[] = 'dev.hanashi.wsdb.links.category';
+                if (\in_array('dev.hanashi.wsdb.links.category.acl', $this->selectedData)) {
+                    $queue[] = 'dev.hanashi.wsdb.links.category.acl';
+                }
             }
         }
 
@@ -289,6 +293,100 @@ final class LinkDatabaseExporter extends AbstractExporter
                     $categoryData,
                     ['i18n' => $i18nData]
                 );
+        }
+    }
+
+    public function countCategoryACLs(): int
+    {
+        $objectType = ObjectTypeCache::getInstance()->getObjectTypeByName(
+            'com.woltlab.wcf.acl',
+            'de.pehbeh.links.category'
+        );
+        if ($objectType === null) {
+            return 0;
+        }
+
+        $sql = "SELECT (
+                    SELECT      COUNT(*)
+                    FROM        wcf1_acl_option_to_group acl_option_to_group
+                    INNER JOIN  wcf1_acl_option acl_option
+                            ON  acl_option.optionID = acl_option_to_group.optionID
+                    WHERE       acl_option.objectTypeID = ?
+                ) + (
+                    SELECT      COUNT(*)
+                    FROM        wcf1_acl_option_to_user acl_option_to_user
+                    INNER JOIN  wcf1_acl_option acl_option
+                            ON  acl_option.optionID = acl_option_to_user.optionID
+                    WHERE       acl_option.objectTypeID = ?
+                ) AS count";
+        $statement = $this->database->prepare($sql);
+        $statement->execute([$objectType->objectTypeID, $objectType->objectTypeID]);
+
+        return $statement->fetchSingleColumn();
+    }
+
+    public function exportCategoryACLs(int $offset, int $limit): void
+    {
+        $objectType = ObjectTypeCache::getInstance()->getObjectTypeByName(
+            'com.woltlab.wcf.acl',
+            'de.pehbeh.links.category'
+        );
+        if ($objectType === null) {
+            return;
+        }
+
+        $aclMap = [
+            'canViewCategory' => [
+                'canViewCategory',
+                'canViewRecord',
+            ],
+            'canAddLinkEntry' => [
+                'canAddRecord',
+            ],
+        ];
+
+        $sql = "(
+                    SELECT  acl_option.optionName, acl_option.optionID,
+                            option_to_group.objectID, option_to_group.optionValue, 0 AS userID, option_to_group.groupID
+                    FROM    wcf1_acl_option_to_group option_to_group,
+                            wcf1_acl_option acl_option
+                    WHERE   acl_option.optionID = option_to_group.optionID
+                            AND acl_option.objectTypeID = ?
+                )
+                UNION
+                (
+                    SELECT  acl_option.optionName, acl_option.optionID,
+                            option_to_user.objectID, option_to_user.optionValue, option_to_user.userID, 0 AS groupID
+                    FROM    wcf1_acl_option_to_user option_to_user,
+                            wcf1_acl_option acl_option
+                    WHERE   acl_option.optionID = option_to_user.optionID
+                            AND acl_option.objectTypeID = ?
+                )
+                ORDER BY    optionID, objectID, userID, groupID";
+        $statement = $this->database->prepareUnmanaged($sql, $limit, $offset);
+        $statement->execute([$objectType->objectTypeID, $objectType->objectTypeID]);
+        while ($row = $statement->fetchArray()) {
+            $acls = $aclMap[$row['optionName']] ?? [];
+            foreach ($acls as $acl) {
+                $data = [
+                    'objectID' => $row['objectID'],
+                    'optionValue' => $row['optionValue'],
+                ];
+                if ($row['userID']) {
+                    $data['userID'] = $row['userID'];
+                }
+                if ($row['groupID']) {
+                    $data['groupID'] = $row['groupID'];
+                }
+
+                ImportHandler::getInstance()
+                    ->getImporter('dev.hanashi.wsdb.links.category.acl')
+                    ->import(
+                        0,
+                        $data,
+                        ['optionName' => $acl]
+                    );
+            }
         }
     }
 
