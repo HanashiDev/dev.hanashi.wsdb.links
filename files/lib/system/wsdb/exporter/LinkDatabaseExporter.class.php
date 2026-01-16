@@ -79,6 +79,18 @@ final class LinkDatabaseExporter extends AbstractExporter
             if (\in_array('dev.hanashi.wsdb.links.option', $this->selectedData)) {
                 $queue[] = 'dev.hanashi.wsdb.links.option';
             }
+            if (\in_array('dev.hanashi.wsdb.links.links', $this->selectedData)) {
+                $queue[] = 'dev.hanashi.wsdb.links.links';
+                if (\in_array('dev.hanashi.wsdb.links.option.values', $this->selectedData)) {
+                    $queue[] = 'dev.hanashi.wsdb.links.option.values';
+                }
+                if (\in_array('dev.hanashi.wsdb.links.comment', $this->selectedData)) {
+                    $queue[] = 'dev.hanashi.wsdb.links.comment';
+                }
+                if (\in_array('dev.hanashi.wsdb.links.comment.response', $this->selectedData)) {
+                    $queue[] = 'dev.hanashi.wsdb.links.comment.response';
+                }
+            }
         }
 
         return $queue;
@@ -97,7 +109,6 @@ final class LinkDatabaseExporter extends AbstractExporter
                 'dev.hanashi.wsdb.links.option.values',
                 'dev.hanashi.wsdb.links.comment',
                 'dev.hanashi.wsdb.links.comment.response',
-                'dev.hanashi.wsdb.links.bbcode',
             ],
         ];
     }
