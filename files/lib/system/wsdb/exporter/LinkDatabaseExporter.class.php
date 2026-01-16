@@ -89,9 +89,9 @@ final class LinkDatabaseExporter extends AbstractExporter
                 }
                 if (\in_array('dev.hanashi.wsdb.links.comment', $this->selectedData)) {
                     $queue[] = 'dev.hanashi.wsdb.links.comment';
-                }
-                if (\in_array('dev.hanashi.wsdb.links.comment.response', $this->selectedData)) {
-                    $queue[] = 'dev.hanashi.wsdb.links.comment.response';
+                    if (\in_array('dev.hanashi.wsdb.links.comment.response', $this->selectedData)) {
+                        $queue[] = 'dev.hanashi.wsdb.links.comment.response';
+                    }
                 }
             }
         }
@@ -530,6 +530,118 @@ final class LinkDatabaseExporter extends AbstractExporter
                         'linkID' => $linkID,
                     ]
                 );
+        }
+    }
+
+    public function countComments(): int
+    {
+        $objectType = ObjectTypeCache::getInstance()->getObjectTypeByName(
+            'com.woltlab.wcf.comment.commentableContent',
+            'de.pehbeh.links.linkEntryComment'
+        );
+        if ($objectType === null) {
+            return 0;
+        }
+
+        $sql = "SELECT  COUNT(*)
+                FROM    wcf1_comment
+                WHERE   objectTypeID = ?";
+        $statement = $this->database->prepare($sql);
+        $statement->execute([$objectType->objectTypeID]);
+
+        return $statement->fetchSingleColumn();
+    }
+
+    public function exportComments(int $offset, int $limit): void
+    {
+        $objectType = ObjectTypeCache::getInstance()->getObjectTypeByName(
+            'com.woltlab.wcf.comment.commentableContent',
+            'de.pehbeh.links.linkEntryComment'
+        );
+        if ($objectType === null) {
+            return;
+        }
+
+        $sql = "SELECT      *
+                FROM        wcf1_comment
+                WHERE       objectTypeID = ?
+                ORDER BY    commentID";
+        $statement = $this->database->prepare($sql, $limit, $offset);
+        $statement->execute([$objectType->objectTypeID]);
+        while ($row = $statement->fetchArray()) {
+            $data = [
+                'objectID' => $row['objectID'],
+                'userID' => $row['userID'],
+                'username' => $row['username'],
+                'message' => $row['message'],
+                'time' => $row['time'],
+                'enableHtml' => (isset($row['enableHtml'])) ? $row['enableHtml'] : 0,
+                'isDisabled' => (isset($row['isDisabled'])) ? $row['isDisabled'] : 0,
+            ];
+
+            ImportHandler::getInstance()
+                ->getImporter('dev.hanashi.wsdb.links.comment')
+                ->import($row['commentID'], $data);
+        }
+    }
+
+    public function countCommentResponses(): int
+    {
+        $objectType = ObjectTypeCache::getInstance()->getObjectTypeByName(
+            'com.woltlab.wcf.comment.commentableContent',
+            'de.pehbeh.links.linkEntryComment'
+        );
+        if ($objectType === null) {
+            return 0;
+        }
+
+        $sql = "SELECT  COUNT(*) AS count
+                FROM    wcf1_comment_response
+                WHERE   commentID IN (
+                            SELECT  commentID
+                            FROM    wcf1_comment
+                            WHERE   objectTypeID = ?
+                        )";
+        $statement = $this->database->prepare($sql);
+        $statement->execute([$objectType->objectTypeID]);
+
+        return $statement->fetchSingleColumn();
+    }
+
+    public function exportCommentResponses(int $offset, int $limit): void
+    {
+        $objectType = ObjectTypeCache::getInstance()->getObjectTypeByName(
+            'com.woltlab.wcf.comment.commentableContent',
+            'de.pehbeh.links.linkEntryComment'
+        );
+        if ($objectType === null) {
+            return;
+        }
+
+        $sql = "SELECT      *
+                FROM        wcf1_comment_response
+                WHERE       commentID IN (
+                                SELECT  commentID
+                                FROM    wcf1_comment
+                                WHERE   objectTypeID = ?
+                            )
+                ORDER BY    responseID";
+        $statement = $this->database->prepareUnmanaged($sql, $limit, $offset);
+        $statement->execute([$objectType->objectTypeID]);
+        while ($row = $statement->fetchArray()) {
+            $data = [
+                'commentID' => $row['commentID'],
+                'time' => $row['time'],
+                'userID' => $row['userID'],
+                'username' => $row['username'],
+                'message' => $row['message'],
+                'enableHtml' => (isset($row['enableHtml'])) ? $row['enableHtml'] : 0,
+                'isDisabled' => (isset($row['isDisabled'])) ? $row['isDisabled'] : 0,
+            ];
+
+            ImportHandler::getInstance()
+                ->getImporter('dev.hanashi.wsdb.links.comment.response')
+                ->import($row['responseID'], $data);
         }
     }
 

@@ -23,6 +23,8 @@
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.option"><![CDATA[Eingabefelder]]></item>
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.links"><![CDATA[Links]]></item>
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.option.values"><![CDATA[Eingabefeld-Werte]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.comment"><![CDATA[Kommentare]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.comment.response"><![CDATA[Antworten auf Kommentare]]></item>
 		</category>
 	</import>
 </language>

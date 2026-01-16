@@ -41,5 +41,15 @@
 			<definitionname>com.woltlab.wcf.importer</definitionname>
 			<classname>wcf\system\wsdb\importer\LinkOptionValuesImporter</classname>
 		</type>
+		<type>
+			<name>dev.hanashi.wsdb.links.comment</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname>wcf\system\wsdb\importer\LinkCommentImporter</classname>
+		</type>
+		<type>
+			<name>dev.hanashi.wsdb.links.comment.response</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname>wcf\system\wsdb\importer\LinkCommentResponseImporter</classname>
+		</type>
 	</import>
 </data>
