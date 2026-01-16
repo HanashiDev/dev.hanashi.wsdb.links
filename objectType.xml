@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/objectType.xsd">
+	<import>
+		<type>
+			<name>dev.hanashi.wsdb.links</name>
+			<definitionname>com.woltlab.wcf.exporter</definitionname>
+			<classname>wcf\system\wsdb\exporter\LinkDatabaseExporter</classname>
+		</type>
+		<type>
+			<name>dev.hanashi.wsdb.links</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname>wcf\system\wsdb\importer\LinkDatabaseImporter</classname>
+		</type>
+		<type>
+			<name>dev.hanashi.wsdb.links.category</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname>wcf\system\wsdb\importer\LinkCategoryImporter</classname>
+		</type>
+		<type>
+			<name>dev.hanashi.wsdb.links.permission</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname>wcf\system\wsdb\importer\LinkPermissionImporter</classname>
+		</type>
+	</import>
+</data>
