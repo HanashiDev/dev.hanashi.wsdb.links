@@ -23,9 +23,11 @@ final class LinkDatabaseExporter extends AbstractExporter
         'dev.hanashi.wsdb.links.category.acl' => 'CategoryACLs',
         'dev.hanashi.wsdb.links.option' => 'Options',
         'dev.hanashi.wsdb.links.links' => 'Links',
+        // TODO: attachment importer
         'dev.hanashi.wsdb.links.option.values' => 'OptionValues',
         'dev.hanashi.wsdb.links.comment' => 'Comments',
         'dev.hanashi.wsdb.links.comment.response' => 'CommentResponses',
+        'dev.hanashi.wsdb.links.reaction' => 'Reactions',
     ];
 
     #[\Override]
@@ -93,6 +95,9 @@ final class LinkDatabaseExporter extends AbstractExporter
                         $queue[] = 'dev.hanashi.wsdb.links.comment.response';
                     }
                 }
+                if (\in_array('dev.hanashi.wsdb.links.reaction', $this->selectedData)) {
+                    $queue[] = 'dev.hanashi.wsdb.links.reaction';
+                }
             }
         }
 
@@ -112,6 +117,7 @@ final class LinkDatabaseExporter extends AbstractExporter
                 'dev.hanashi.wsdb.links.option.values',
                 'dev.hanashi.wsdb.links.comment',
                 'dev.hanashi.wsdb.links.comment.response',
+                'dev.hanashi.wsdb.links.reaction',
             ],
         ];
     }
@@ -642,6 +648,56 @@ final class LinkDatabaseExporter extends AbstractExporter
             ImportHandler::getInstance()
                 ->getImporter('dev.hanashi.wsdb.links.comment.response')
                 ->import($row['responseID'], $data);
+        }
+    }
+
+    public function countReactions(): int
+    {
+        $objectType = ObjectTypeCache::getInstance()->getObjectTypeByName(
+            'com.woltlab.wcf.like.likeableObject',
+            'de.pehbeh.links.likeableLinkEntry'
+        );
+        if ($objectType === null) {
+            return 0;
+        }
+
+        $sql = "SELECT  COUNT(*)
+                FROM    wcf1_like
+                WHERE   objectTypeID = ?";
+        $statement = $this->database->prepare($sql);
+        $statement->execute([$objectType->objectTypeID]);
+
+        return $statement->fetchSingleColumn();
+    }
+
+    public function exportReactions(int $offset, int $limit): void
+    {
+        $objectType = ObjectTypeCache::getInstance()->getObjectTypeByName(
+            'com.woltlab.wcf.like.likeableObject',
+            'de.pehbeh.links.likeableLinkEntry'
+        );
+        if ($objectType === null) {
+            return;
+        }
+
+        $sql = "SELECT      *
+                FROM        wcf1_like
+                WHERE       objectTypeID = ?
+                ORDER BY    likeID";
+        $statement = $this->database->prepareUnmanaged($sql, $limit, $offset);
+        $statement->execute([$objectType->objectTypeID]);
+        while ($row = $statement->fetchArray()) {
+            $data = [
+                'objectID' => $row['objectID'],
+                'objectUserID' => $row['objectUserID'],
+                'userID' => $row['userID'],
+                'likeValue' => $row['likeValue'],
+                'time' => $row['time'],
+            ];
+
+            ImportHandler::getInstance()
+                ->getImporter('dev.hanashi.wsdb.links.reaction')
+                ->import(0, $data);
         }
     }
 

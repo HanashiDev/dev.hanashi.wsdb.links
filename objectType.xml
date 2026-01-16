@@ -51,5 +51,10 @@
 			<definitionname>com.woltlab.wcf.importer</definitionname>
 			<classname>wcf\system\wsdb\importer\LinkCommentResponseImporter</classname>
 		</type>
+		<type>
+			<name>dev.hanashi.wsdb.links.reaction</name>
+			<definitionname>com.woltlab.wcf.importer</definitionname>
+			<classname>wcf\system\wsdb\importer\LinkReactionImporter</classname>
+		</type>
 	</import>
 </data>

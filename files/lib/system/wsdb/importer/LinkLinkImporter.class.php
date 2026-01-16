@@ -42,6 +42,7 @@ final class LinkLinkImporter extends AbstractImporter
                 'comments' => $data['comments'],
                 'coverPhotoID' => $this->getCoverPhotoID($data['imageFile']),
                 'externalURL' => $this->getLink($data),
+                'reactions' => $data['cumulativeLikes'],
             ],
             'content' => [
                 0 => $contentData,

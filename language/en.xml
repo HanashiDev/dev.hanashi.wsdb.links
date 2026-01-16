@@ -25,6 +25,7 @@
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.option.values"><![CDATA[Values of input fields]]></item>
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.comment"><![CDATA[Comments]]></item>
 			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.comment.response"><![CDATA[Answers to comments]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.reaction"><![CDATA[Reactions]]></item>
 		</category>
 	</import>
 </language>
