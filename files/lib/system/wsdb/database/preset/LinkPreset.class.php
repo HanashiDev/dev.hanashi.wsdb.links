@@ -69,7 +69,7 @@ final class LinkPreset extends AbstractPreset
     #[Override]
     public function getShowTeaserInListing(): bool
     {
-        return true;
+        return false;
     }
 
     #[Override]
