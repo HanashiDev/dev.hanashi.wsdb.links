@@ -27,6 +27,7 @@
 		<instruction type="language"/>
 		<instruction type="eventListener"/>
 		<instruction type="templateListener"/>
+		<instruction type="objectType"/>
 		<instruction type="database">acp/database/install_dev.hanashi.wsdb.links.php</instruction>
 		<instruction type="script" run="standalone">acp/install_dev.hanashi.wsdb.links.php</instruction>
 	</instructions>

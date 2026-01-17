@@ -10,6 +10,23 @@
 			<item name="dev.hanashi.wsdb.externalUrl"><![CDATA[Link]]></item>
 			<item name="dev.hanashi.wsdb.linkButton"><![CDATA[Open link]]></item>
 			<item name="dev.hanashi.wsdb.linkButtonTitle"><![CDATA[Labeling of the link button]]></item>
+			<item name="dev.hanashi.wsdb.links.recordSingular"><![CDATA[Link]]></item>
+			<item name="dev.hanashi.wsdb.links.recordPlural"><![CDATA[Links]]></item>
+			<item name="dev.hanashi.wsdb.links.definiteArticle"><![CDATA[the]]></item>
+		</category>
+		<category name="wcf.acp.dataImport">
+			<item name="wcf.acp.dataImport.exporter.dev.hanashi.wsdb.links"><![CDATA[Link database (de.pehbeh.links) -> WoltLab Suite Database]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links"><![CDATA[Link database]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.permission"><![CDATA[Permissions]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.category"><![CDATA[Categories]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.category.acl"><![CDATA[Category permissions]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.option"><![CDATA[Input options]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.links"><![CDATA[Links]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.option.values"><![CDATA[Values of input fields]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.comment"><![CDATA[Comments]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.comment.response"><![CDATA[Answers to comments]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.reaction"><![CDATA[Reactions]]></item>
+			<item name="wcf.acp.dataImport.data.dev.hanashi.wsdb.links.attachments"><![CDATA[Attachments]]></item>
 		</category>
 	</import>
 </language>
